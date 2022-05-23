@@ -12,7 +12,7 @@ const stream = fs.WriteStream(pathText);
 (function writeFile() {
   interface.question('Введите какой-ниудь текст: ', (answer) => {
     if (answer === 'exit') {
-      console.log('exit');
+      console.log('Текст успешно записан');
       interface.close();
     }
     else {
@@ -26,9 +26,9 @@ const stream = fs.WriteStream(pathText);
       });
     }
   });
-  interface.on('SIGINT',()=>{
-    console.log('exit');
-    interface.close();
-  });
 })();
+interface.on('SIGINT',()=>{
+  console.log('\nТекст успешно записан');
+  interface.close();
+});
 
