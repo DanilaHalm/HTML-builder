@@ -48,7 +48,7 @@ fs.readdir(pathFromStyles, {encoding: 'utf-8'}, (error, arr) => {
 
 
 
-function deleteAssets (toAssets) {
+async function deleteAssets (toAssets) {
   if (flag) {
   fs.readdir(toAssets,{encoding:'utf-8', withFileTypes: true}, (error, array) => {
     if (error) {
@@ -70,9 +70,8 @@ function deleteAssets (toAssets) {
     }
   });
 }
-  htmlBuilder();
 }
-deleteAssets(pathToAssets);
+deleteAssets(pathToAssets).then(htmlBuilder());
 
 function assets (fromAssets, toAssets){
   fs.mkdir(toAssets, {recursive: true}, (error) => {
