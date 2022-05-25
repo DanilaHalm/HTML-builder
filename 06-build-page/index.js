@@ -9,8 +9,13 @@ const pathFromStyles = path.join(__dirname, 'styles');
 const pathToStyles = path.join(__dirname, 'project-dist', 'style.css');
 const pathFromAssets = path.join(__dirname, 'assets');
 const pathToAssets = path.join(pathToProDist,  'assets');
-let flag = false;
 
+fs.stat(pathToAssets, (error)=> {
+  if (error) assets(pathFromAssets, pathToAssets).then(htmlBuilder());
+  else {
+    deleteAssets(pathToAssets).then(assets(pathFromAssets, pathToAssets).then(htmlBuilder()));
+  }
+})
 
 fs.mkdir(pathToProDist,{ recursive: true },(error) => {
   if (error) {
@@ -49,7 +54,6 @@ fs.readdir(pathFromStyles, {encoding: 'utf-8'}, (error, arr) => {
 
 
 async function deleteAssets (toAssets) {
-  if (flag) {
   fs.readdir(toAssets,{encoding:'utf-8', withFileTypes: true}, (error, array) => {
     if (error) {
       throw error;
@@ -70,10 +74,8 @@ async function deleteAssets (toAssets) {
     }
   });
 }
-}
-deleteAssets(pathToAssets).then(htmlBuilder());
 
-function assets (fromAssets, toAssets){
+async function assets (fromAssets, toAssets){
   fs.mkdir(toAssets, {recursive: true}, (error) => {
     if (error) {
       throw error;
@@ -97,13 +99,11 @@ function assets (fromAssets, toAssets){
       });
     }
   }); 
-  flag = true;
 }
-assets(pathFromAssets, pathToAssets);  
 
 
 
-function htmlBuilder() { 
+async function htmlBuilder() { 
   const templateStream = fs.createReadStream(pathFromTemplate,'utf-8');
   templateStream.on('data', (data) => {
     let string = data.toString();

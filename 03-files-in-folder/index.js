@@ -19,7 +19,8 @@ fs.readdir(way, {
             throw error;
           }
           else {
-            console.log(file.name.split('.')[0] + ' - ' + path.extname(file.name).slice(1) + ' - ' + stats.size / 1024 + 'kb');
+            const extention = path.extname(pathFile);
+            console.log(path.basename(pathFile,extention) + ' - ' + path.extname(file.name).slice(1) + ' - ' + stats.size / 1024 + 'kb');
           }
         });
       }});
